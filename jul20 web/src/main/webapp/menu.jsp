@@ -62,9 +62,11 @@
 	</div>
 	
 	<!-- 9듭급 (세션)인 분만 볼 수 있는 메뉴입니다. -->
+	<c:if test="${sessionScope.grade eq 9 }">
 	<div id= "menu_title">
 		<a href="./admin">관리자</a>
 	</div>
+	</c:if>
 			
 	<c:choose>
 		<c:when test="${sessionScope.id ne null }">

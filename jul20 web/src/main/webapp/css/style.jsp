@@ -11,6 +11,7 @@ body{
 background-color: #A2E9FF;
 margin: 0;
 padding: 0;
+overflow: auto;
 }
 
 #mainWrapper{
@@ -44,6 +45,7 @@ padding: 0;
 	padding-right: 60px;
 	background-color: #3C5087;
 	margin-bottom: 30px;
+	overflow: clip;
 }
 
 #navbar a{

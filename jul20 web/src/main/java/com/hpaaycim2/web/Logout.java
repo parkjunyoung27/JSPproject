@@ -47,6 +47,10 @@ public class Logout extends HttpServlet {
 		if(session.getAttribute("name") != null) {
 			session.removeAttribute("name");
 		}
+		
+		if(session.getAttribute("grade") != null) {
+			session.removeAttribute("gallery");
+		}
 		//session.invalidate(); //해당 브라우저의 모든 세션 끊기
 		
 		//페이지 이동

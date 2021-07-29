@@ -53,7 +53,7 @@ public class Login extends HttpServlet {
 				HttpSession session = request.getSession();
 				session.setAttribute("id", member.get("id"));
 				session.setAttribute("name", member.get("name"));
-				if(Util.str2Int2((String)member.get("grade")) == 9) {					
+				if((int)member.get("grade") == 9) {					
 					session.setAttribute("grade", member.get("grade"));
 				}
 				
