@@ -23,18 +23,19 @@ public class GalleryDAO {
 		return dao;
 	}
 
-	public ArrayList<HashMap<String, Object>>  galleryList() {
+	public ArrayList<HashMap<String, Object>>  galleryList(int page) {
 		
 		ArrayList<HashMap<String, Object>> galleryList = null;
 		
 		Connection con = DBConnection.dbcConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		String sql = "SELECT * FROM galleryview LIMIT 0,10";
+		String sql = "SELECT * FROM galleryview LIMIT ?, 6"; // 6개씩 가져오기
 		
 		
 		try {
 			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, page);
 			rs = pstmt.executeQuery();
 			if(rs!=null) {
 				galleryList = new ArrayList<HashMap<String,Object>>();
@@ -50,6 +51,7 @@ public class GalleryDAO {
 					map.put("gcount", rs.getInt("gcount"));
 					map.put("id", rs.getString("id"));
 					map.put("name", rs.getString("name"));
+					map.put("totalcount", rs.getInt("totalcount"));
 					galleryList.add(map);
 					//System.out.println(map);
 				}

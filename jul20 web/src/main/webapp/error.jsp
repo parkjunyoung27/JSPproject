@@ -7,7 +7,10 @@
 <head>
 <meta charset="UTF-8">
 <title>error</title>
-<link href="./css/main.css" rel="stylesheet">
+<style>
+<%@ include file="./css/style.jsp" %>
+
+</style>
 
 </head>
 <body>
@@ -33,6 +36,8 @@
 
 		</div>
 	</div>
+	
+		<%@ include file="./css/footer.jsp" %>
 	
 </body>
 </html>

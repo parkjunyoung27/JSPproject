@@ -8,11 +8,12 @@
 <head>
 <meta charset="UTF-8">
 <title>freedetail</title>
-<link href="./css/main.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.6.0.js" 
 integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" 
 crossorigin="anonymous"></script>
 <style type="text/css">
+<%@ include file="./css/style.jsp" %>
+
 </style>
 <script type="text/javascript">
 
@@ -164,6 +165,8 @@ var now = 0;
 			</div>
 		
 	</div>		
+	
+	<%@ include file="./css/footer.jsp" %>
 
 </body>
 </html>

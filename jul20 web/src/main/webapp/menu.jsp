@@ -60,8 +60,10 @@
 	<div id= "menu_title">
 		<a href="./gallery">갤러리</a>
 	</div>
+	
+	<!-- 9듭급 (세션)인 분만 볼 수 있는 메뉴입니다. -->
 	<div id= "menu_title">
-		<a href="./manager">관리자</a>
+		<a href="./admin">관리자</a>
 	</div>
 			
 	<c:choose>

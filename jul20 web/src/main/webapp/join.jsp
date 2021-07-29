@@ -14,9 +14,9 @@
 <head>
 <meta charset="UTF-8">
 <title>Join</title>
-<link href="./css/main.css" rel="stylesheet">
 
 <style type = "text/css">
+<%@ include file="./css/style.jsp" %>
 
 #join_form{
 	width: 500px;
@@ -32,7 +32,7 @@
 #check_id{
 	width: 75px;
 	position: absolute;
-	top: 57px; left: 417px;
+	top: 41px; left: 417px;
 	cursor: pointer;
 	height: 30px;
 	line-height: 30px;
@@ -296,5 +296,8 @@ function checkID(){
 		 	</div>
 		</div>
 	</div>
+	
+		<%@ include file="./css/footer.jsp" %>
+	
 </body>
 </html>

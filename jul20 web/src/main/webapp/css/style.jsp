@@ -1,6 +1,7 @@
-@charset "UTF-8";
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 
-/*기본 배경*/
+    /*기본 배경*/
 *{
 	margin:0;
 	padding:0;
@@ -14,12 +15,14 @@ padding: 0;
 
 #mainWrapper{
 	margin: 0 auto;
-	min-height: 700px;
 	width: 1100px;
 	background-color: #AECDFF;
 	margin-left: 30%;
 	transform: translate(-30%);	
 	border-radius: 10px;
+	height: auto;
+	overflow: hidden;
+	min-height: 700px;
 }
 
 #board{
@@ -31,6 +34,7 @@ padding: 0;
 	border: 2px white solid;
 	background-color: #B8D7FF;
 	border-radius: 10px;
+	margin-bottom: 30px;
 }
 
 #navbar{
@@ -288,5 +292,31 @@ li{
 
 .commentWrite:hover{cursor:pointer;}
 
+#Paging{
+	text-align: center;	
+	margin-top: 20px;
+}
 
+#Paging a{
+	text-decoration: none;
+	color: black;
+	margin: 5px;
+}
 
+footer{
+	background-color: #3C5087;
+	clear: both;
+}
+
+#footer{
+	text-align: center;
+	margin-top: 70px;
+    padding: 10px;
+}
+
+#footer p {
+	margin-top: 5px;
+	color: white;
+}
+
+    

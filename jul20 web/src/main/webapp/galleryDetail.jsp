@@ -8,7 +8,9 @@
 <head>
 <meta charset="UTF-8">
 <title>galleryDetail</title>
-<link href="./css/main.css" rel="stylesheet">
+<style>
+<%@ include file="./css/style.jsp" %>
+</style>
 
 <script src="https://code.jquery.com/jquery-3.6.0.js" 
 integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" 
@@ -73,6 +75,7 @@ function gallery(gno, code){
 		</div>
 	</div>
 	
+	<%@ include file="./css/footer.jsp" %>
 
 </body>
 </html>

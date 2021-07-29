@@ -7,9 +7,9 @@
 <head>
 <meta charset="UTF-8">
 <title>write</title>
-<link href="./css/main.css" rel="stylesheet">
 
 <style type="text/css">
+<%@ include file="./css/style.jsp" %>
 
 #write{
 	margin:0 auto;
@@ -68,6 +68,8 @@ function check(){
 
 		</div>
 	</div>
+
+	<%@ include file="./css/footer.jsp" %>
 
 </body>
 </html>

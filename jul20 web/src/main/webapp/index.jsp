@@ -17,21 +17,9 @@
 <head>
 <meta charset="UTF-8">
 <title>Home</title>
-<link href="./css/main.css" rel="stylesheet">
 
 <style type ="text/css">
-</style>
-<style>
-#Paging{
-	text-align: center;	
-	margin-top: 20px;
-}
-
-#Paging a{
-	text-decoration: none;
-	color: black;
-	margin: 5px;
-}
+<%@ include file="./css/style.jsp" %>
 </style>
 
 </head>
@@ -93,10 +81,10 @@
 			</div>
 				<!-- 게시판 페이징 영역 -->
 			<div id="Paging">
-			<!-- 페이징 설정 /변수생성구문을 다 여기로 이동 -->
-			<c:set var="pageName" value="index" scope="request"/>
-			<c:set var="PAGENUMBER" value="10" scope="request"/> <!-- 한 쪽당 10개씩 나열  -->
-			<c:import url="paging.jsp"/>
+				<!-- 페이징 설정 /변수생성구문을 다 여기로 이동 -->
+				<c:set var="pageName" value="index" scope="request"/>
+				<c:set var="PAGENUMBER" value="10" scope="request"/> <!-- 한 쪽당 10개씩 나열  -->
+				<c:import url="paging.jsp"/>
 			</div>
 			
 			<div id="liSearchOption">
@@ -112,6 +100,8 @@
 		</div>
 
 	</div>
+	
+	<%@ include file="./css/footer.jsp" %>
 	
 </body>
 </html>

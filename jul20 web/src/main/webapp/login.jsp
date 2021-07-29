@@ -5,8 +5,8 @@
 <head>
 <meta charset="UTF-8">
 <title>login</title>
-<link href="./css/main.css" rel="stylesheet">
 <style type="text/css">
+<%@ include file="./css/style.jsp" %>
 
 </style>
 
@@ -29,6 +29,7 @@
 		</div>
 	
 	</div>
+			<%@ include file="./css/footer.jsp" %>
 	
 </body>
 </html>

@@ -29,7 +29,7 @@ public class LoginDAO {
 		Connection conn = DBConnection.dbcConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		String sql = "SELECT id,name FROM login WHERE id=? AND pw=? ";
+		String sql = "SELECT id,name,grade FROM login WHERE id=? AND pw=? AND grade > 4";
 		
 		try {
 			pstmt= conn.prepareStatement(sql);
@@ -39,7 +39,9 @@ public class LoginDAO {
 			if(rs.next()) {
 				login = new HashMap<String, Object>();
 				login.put("id", rs.getString("id"));
-				login.put("name", rs.getString("name"));		
+				login.put("name", rs.getString("name"));
+				//등급 추가
+				login.put("grade", rs.getInt("grade"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace(); 

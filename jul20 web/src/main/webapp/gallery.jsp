@@ -12,8 +12,8 @@
 <head>
 <meta charset="UTF-8">
 <title>gallery</title>
-<link href="./css/main.css" rel="stylesheet">
 <style type="text/css">
+<%@ include file="./css/style.jsp" %>
 
 #gallery_form {
     background-color: white;
@@ -38,8 +38,8 @@
 
 #gallery_form p{
 	margin: 5px;
-	padding: 5px;
-	text-align: center;
+	padding: 15px;
+	display: initial;
 }
 
 #Paging {
@@ -62,12 +62,11 @@
 		<div id = "board">
 			<li class="title">갤러리</li>		
 
-	
 			<c:forEach items="${dtomm }" var="dto">
 				<!--  오는 값이 있습니다. -->
 					
 				<div id="gallery_form"  onclick="location.href='./galleryDetail?gno=${dto.gno }'">
-					<div>${dto.gno }. ${dto.gtitle }</div>					
+					<p>${dto.gno }. ${dto.gtitle }</p>					
 					<div>
 						<c:choose>
 							<c:when test="${dto.gthumbnail eq null }">
@@ -77,12 +76,11 @@
 								<img alt="thumb" src="./thumbnail/${dto.gthumbnail }">
 							</c:otherwise>
 						</c:choose>
+					</div>
 					<p>${dto.id }(${dto.name })</p>
 					<p>조회: ${dto.gcount }</p>
 					<p>${dto.date }</p>
-					</div>
-			</div>
-							
+				</div>					
 			</c:forEach>
 				
 			<div style="text-align:center; margin-top:20px;">
@@ -103,6 +101,7 @@
 				<div id="Paging">
 				<!-- 이동할 페이지명 변수처리 -->
 					<c:set var="pageName" value="gallery" scope="request"/>
+					<c:set var="PAGENUMBER" value="6" scope="request"/> <!-- 한쪽 마다 나오는 갯수 -->
 					<c:import url="paging.jsp"/>
 				</div>
 				
@@ -117,10 +116,8 @@
 				</div>		
 		</div>
 	</div>
-	
-</body>
-</html>		
 
+	<%@ include file="./css/footer.jsp" %>
 
 </body>
 </html>

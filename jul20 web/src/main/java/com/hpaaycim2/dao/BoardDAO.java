@@ -40,7 +40,7 @@ public class BoardDAO {
 	ResultSet rs = null;
 	//sql -----> 테이블 새로 만들겁니다. 빈칸으로 두세요.
 	//테이블 새로 만들겁니다 빈칸으로 두세요.
-	String sql ="SELECT * FROM freeview LIMIT ?,10";
+	String sql ="SELECT * FROM freeview LIMIT ?, 10"; //10개씩 가져오기
 	//로직은 테이블명 완성 후에 짜겠습니다.
 	
 	try {
