@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.hpaaycim2.dao.LogDAO;
 import com.hpaaycim2.dao.LoginDAO;
 import com.hpaaycim2.util.Util;
 
@@ -25,6 +26,18 @@ public class Login extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		String id = "";
+		if(session.getAttribute("id")!=null) {
+			id = (String)session.getAttribute("id");
+		}
+		//log남기기
+		HashMap<String, Object> log = new HashMap<String, Object>();
+		log.put("ip", Util.getIP(request));
+		log.put("id", id);
+		log.put("target", "login");
+		log.put("etc", request.getHeader("User-Agent"));
+		LogDAO.insertLog(log);
 		
 		RequestDispatcher rd = request.getRequestDispatcher("./login.jsp");
 		rd.forward(request, response);

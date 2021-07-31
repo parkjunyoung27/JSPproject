@@ -84,6 +84,7 @@
 				<!-- 페이징 설정 /변수생성구문을 다 여기로 이동 -->
 				<c:set var="pageName" value="index" scope="request"/>
 				<c:set var="PAGENUMBER" value="10" scope="request"/> <!-- 한 쪽당 10개씩 나열  -->
+				<c:set var="LIMIT" value="5" scope="request"/>
 				<c:import url="paging.jsp"/>
 			</div>
 			

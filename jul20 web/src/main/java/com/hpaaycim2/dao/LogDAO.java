@@ -39,11 +39,34 @@ public class LogDAO {
 		}
 
 	}
+	
+
+	public ArrayList<String> list(String name) {
+		ArrayList<String> list = null;
+		Connection con = DBConnection.dbcConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = "SELECT DISTINCT " + name + " FROM logview";
+
+		try {
+			pstmt = con.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if (rs != null) {
+				list = new ArrayList<String>();
+				while (rs.next()) {
+					list.add(rs.getString(name));
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
 
 
 	public ArrayList<HashMap<String, Object>> loglist(int page) {
 		ArrayList<HashMap<String, Object>> list = null;
-		
+		System.out.println("admin 페이지 : " + (page+1));
 		//DB접속
 		//conn
 		Connection con = DBConnection.dbcConnection();
@@ -86,107 +109,169 @@ public class LogDAO {
 	}
 
 
-	public ArrayList<String> ipList() {
-		ArrayList<String> iplist = new ArrayList<String>();
-		Connection con = DBConnection.dbcConnection();
-		PreparedStatement pstmt = null;
-		String sql = "SELECT DISTINCT log_ip FROM logview";
-		ResultSet rs = null;
-		
-		try {
-			pstmt = con.prepareStatement(sql);
-			rs = pstmt.executeQuery();
-			if(rs!= null) {
-				while(rs.next()) {					
-					iplist.add(rs.getString("log_ip"));
-				}
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}finally {
-			Util.closeAll(rs, pstmt, con);
-		}
-		
-		return iplist;
-	}
-
-
-	public ArrayList<String> targetList() {
-		ArrayList<String> targetlist = new ArrayList<String>();
-		Connection con = DBConnection.dbcConnection();
-		PreparedStatement pstmt = null;
-		String sql = "SELECT DISTINCT log_target FROM logview";
-		ResultSet rs = null;
-		
-		try {
-			pstmt = con.prepareStatement(sql);
-			rs = pstmt.executeQuery();
-			if(rs!= null) {
-				while(rs.next()) {
-					targetlist.add(rs.getString("log_target"));
-				}
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}finally {
-			Util.closeAll(rs, pstmt, con);
-		}
-			return targetlist;
-	}
-
-
-	public ArrayList<HashMap<String, Object>> selectIPTarget(String ip, int i) {
+	public ArrayList<HashMap<String, Object>> selectIP(String ip, int i) {
 		ArrayList<HashMap<String, Object>> list = null;
 		Connection con = DBConnection.dbcConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		String sql = "SELECT (SELECT count(*) FROM log WHERE log_ip=?) AS totalcount"
-				+ ", log_no, log_ip, log_date, log_target, log_id, log_etc"
-				+ " FROM log WHERE log_ip=? LIMIT ?, 20 ";
+		String sql = "SELECT "
+				+ "(SELECT count(*) FROM freelog WHERE log_ip=?) as totalcount,"
+				+ " log_no, log_ip, log_date, log_target, log_id, log_etc"
+				+ " FROM freelog WHERE log_ip=? limit ?, 20 ";
 
 		try {
 			pstmt = con.prepareStatement(sql);
-			
+			pstmt.setString(1, ip);
+			pstmt.setString(2, ip);
+			pstmt.setInt(3, i);
+			rs = pstmt.executeQuery();
+			if (rs != null) {
+				list = new ArrayList<HashMap<String, Object>>();
+				while (rs.next()) {
+					/* log_no log_ip log_date log_target log_id log_etc */
+					HashMap<String, Object> map = new HashMap<String, Object>();
+					// totalcount는 없으니 view로 만들어주세요.
+					map.put("totalcount", rs.getInt("totalcount"));
+					map.put("log_no", rs.getInt("log_no"));
+					map.put("log_ip", rs.getString("log_ip"));
+					map.put("log_date", rs.getString("log_date"));
+					map.put("log_target", rs.getString("log_target"));
+					map.put("log_id", rs.getString("log_id"));
+					map.put("log_etc", rs.getString("log_etc"));
+					list.add(map);
+				}
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	public ArrayList<HashMap<String, Object>> selectTarget(String target, int i) {
+		ArrayList<HashMap<String, Object>> list = null;
+		Connection con = DBConnection.dbcConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = "SELECT "
+				+ "(SELECT count(*) FROM freelog WHERE log_target=?) as totalcount, "
+				+ "log_no, log_ip, log_date, log_id, log_etc, log_target "
+				+ "FROM logview WHERE log_target=? limit ?, 20 ";
+
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, target);
+			pstmt.setString(2, target);
+			pstmt.setInt(3, i);
+			rs = pstmt.executeQuery();
+			if (rs != null) {
+				list = new ArrayList<HashMap<String, Object>>();
+				while (rs.next()) {
+					/* log_no log_ip log_date log_target log_id log_etc */
+					HashMap<String, Object> map = new HashMap<String, Object>();
+					// totalcount는 없으니 view로 만들어주세요.
+					map.put("totalcount", rs.getInt("totalcount"));
+					map.put("log_no", rs.getInt("log_no"));
+					map.put("log_ip", rs.getString("log_ip"));
+					map.put("log_date", rs.getString("log_date"));
+					map.put("log_target", rs.getString("log_target"));
+					map.put("log_id", rs.getString("log_id"));
+					map.put("log_etc", rs.getString("log_etc"));
+					list.add(map);
+				}
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	public ArrayList<HashMap<String, Object>> selectIpTarget(String ip, String target, int i) {
+		ArrayList<HashMap<String, Object>> list = null;
+		Connection con = DBConnection.dbcConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = "SELECT "
+				+ "(SELECT count(*) FROM freelog WHERE log_target=? AND log_ip=?) "
+				+ "as totalcount, "
+				+ "log_no, log_ip, log_date, log_id, log_etc, log_target "
+				+ "FROM logview WHERE log_target=? AND log_ip=? limit ?, 20 ";
+
+		try {
+			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, target);
 			pstmt.setString(2, ip);
 			pstmt.setString(3, target);
 			pstmt.setString(4, ip);
 			pstmt.setInt(5, i);
 			rs = pstmt.executeQuery();
-			
+			if (rs != null) {
+				list = new ArrayList<HashMap<String, Object>>();
+				while (rs.next()) {
+					/* log_no log_ip log_date log_target log_id log_etc */
+					HashMap<String, Object> map = new HashMap<String, Object>();
+					// totalcount는 없으니 view로 만들어주세요.
+					map.put("totalcount", rs.getInt("totalcount"));
+					map.put("log_no", rs.getInt("log_no"));
+					map.put("log_ip", rs.getString("log_ip"));
+					map.put("log_date", rs.getString("log_date"));
+					map.put("log_target", rs.getString("log_target"));
+					map.put("log_id", rs.getString("log_id"));
+					map.put("log_etc", rs.getString("log_etc"));
+					list.add(map);
+				}
+			}
+
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}		
-		return null;
+		}
+		return list;
 	}
 
-	public ArrayList<HashMap<String, Object>> selectTarget(String ip, String target, int i) {
+
+	public ArrayList<HashMap<String, Object>> search(String searchName, String search, int page) {
 		ArrayList<HashMap<String, Object>> list = null;
 		Connection con = DBConnection.dbcConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		String sql = "SELECT (SELECT count(*) FROM log WHERE log_target=?) AS totalcount"
-				+ ", log_no, log_ip, log_date, log_id, log_etc"
-				+ " FROM logview WHERE log_target=? LIMIT ?, 20 ";
-
+		String sql = "SELECT (SELECT count(*) FROM freelog WHERE log_"
+				+searchName
+				+" LIKE CONCAT('%',?,'%')) as totalcount, "
+				+"log_no, log_ip, log_date, log_id, log_etc, log_target "
+				+"FROM log WHERE log_"+searchName
+				+" LIKE CONCAT('%',?,'%') limit ?, 10";
+		//System.out.println(sql);
+		// LIKE % 로 검색하면 비슷한게 나타난다.
+		
 		try {
 			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, target);
-			pstmt.setString(2, ip);
-			pstmt.setInt(3, i);
+			pstmt.setString(1, search);
+			pstmt.setString(2, search);
+			pstmt.setInt(3, page);
 			rs = pstmt.executeQuery();
+			System.out.println(rs);
 			if(rs != null) {
-				list = new ArrayList<HashMap<String,Object>>();
+				list = new  ArrayList<HashMap<String,Object>>();
 				while(rs.next()) {
-					
+				HashMap<String, Object> map = new HashMap<String, Object>();
+				map.put("totalcount",rs.getInt("totalcount") );							
+				map.put("log_no", rs.getInt("log_no"));
+				map.put("log_ip", rs.getString("log_ip") );
+				map.put("log_date",rs.getDate("log_date") );
+				map.put("log_target",rs.getString("log_target") );
+				map.put("log_id", rs.getString("log_id") );
+				map.put("log_etc", rs.getString("log_etc") );
+				list.add(map);
 				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}finally {
+			Util.closeAll(rs, pstmt, con);
 		}
-		
-		return null;
+		return list;
 	}
-}
 
+}
 

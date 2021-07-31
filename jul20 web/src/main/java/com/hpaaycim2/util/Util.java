@@ -4,8 +4,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import com.hpaaycim2.dao.LogDAO;
 
 public class Util {
 	//ip가져오기
@@ -70,6 +74,6 @@ public class Util {
 			e.printStackTrace();
 		}
 	}
-	
+
 	
 }

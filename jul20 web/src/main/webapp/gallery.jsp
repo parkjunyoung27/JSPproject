@@ -102,6 +102,7 @@
 				<!-- 이동할 페이지명 변수처리 -->
 					<c:set var="pageName" value="gallery" scope="request"/>
 					<c:set var="PAGENUMBER" value="6" scope="request"/> <!-- 한쪽 마다 나오는 갯수 -->
+					<c:set var="LIMIT" value="5" scope="request"/>
 					<c:import url="paging.jsp"/>
 				</div>
 				

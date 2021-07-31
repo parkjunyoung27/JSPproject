@@ -27,73 +27,120 @@ public class Admin extends HttpServlet {
 
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//페이징 처리
-		//두개다 들어올때 하나만 들어올때 등등 처리해줘야됨 
-		//where절 2개 count where절 뒤에 두개값 붙여줘야됨 
-		int page= 1;
-		String ip, target = null;
-		ArrayList<HashMap<String, Object>> list; 
-		
-		if(request.getParameter("page") != null) {
-			page = Util.str2Int2(request.getParameter("page"));
+		HttpSession session = request.getSession();
+		String id = "";
+		if(session.getAttribute("id")!=null) {
+			id = (String)session.getAttribute("id");
 		}
-		if(request.getParameter("ip") != null 
-				&& request.getParameter("target") != null) {
-			 ip = request.getParameter("ip"); 
-			target = request.getParameter("target");
-					list
-				= dao.loglist((page-1)*20);
-			
-		}else if(request.getParameter("ip") != null) {
-			list 
-			= dao.selectIP( ip,(page-1)*10);
-		}
-		else if(request.getParameter("target")!=null) {
-			String target = request.getParameter("target");
-			list = dao.selectTarget(ip,target,(page-1)* 10);
-		}	
+		//log남기기
+		HashMap<String, Object> log = new HashMap<String, Object>();
+		log.put("ip", Util.getIP(request));
+		log.put("id", id);
+		log.put("target", "admin");
+		log.put("etc", request.getHeader("User-Agent"));
+		LogDAO.insertLog(log);
 		
-		//request.getParameter("page" )
-		System.out.println("page : " + page);
-		
-		//page
-
-		ArrayList<HashMap<String, Object>> loglist = dao.loglist((page-1));
-		request.setAttribute("list", loglist);
-		
-		//ipList SELECT DISTINCE log_ip FROM logview
-		ArrayList<String> ipList = dao.ipList();
-		//targetList SELECT 
-		ArrayList<String> targetList= dao.targetList();
-		
-		//admin.jsp 디스패처로 연결해주세요.
-		RequestDispatcher rd = request.getRequestDispatcher("./admin.jsp");
-		request.setAttribute("page", page);
-		request.setAttribute("ipList", ipList);
-		request.setAttribute("targetList", targetList);
-		request.setAttribute("ip", request.getParameter("ip"));
-		request.setAttribute("target", request.getParameter("target"));
-		
-		System.out.println(ipList);
-		System.out.println(targetList);
-		
-		//totalCount 
-		if(loglist != null && loglist.size() > 0 ) {
-			request.setAttribute("totalCount", loglist.get(0).get("totalcount"));
-		}
 		//session 검사 해주세요. grade가 있으면 아래 문장 실행
 		//없으면 "접근할 수 없습니다"로 출력하기
-		HttpSession session = request.getSession();
-		
-		if(request.getAttribute("grade") != null) {
-		int grade = Util.str2Int2((String)session.getAttribute("grade"));
-		request.setAttribute("grade", grade);
+		//admin.jsp 디스패처로 연결해주세요.
+		//log내용을 가져오기
+		//1.페이징 처리 꼭 해주세요.
+		int page = 1;
+		// 로그 리스트 
+		ArrayList<HashMap<String, Object>> list = null;
+		System.out.println("페이지 : " + request.getParameter("page"));
+		//페이지 값이 있을때 , page값 저장
+		if(request.getParameter("page") != null) {
+			page = Util.str2Int(request.getParameter("page"));
+		}
+		//첫화면 일때  ip, target 아직 설정 안할 때 
+		if(request.getParameter("ip") == null 
+				&& request.getParameter("target") == null) {
+			list = dao.loglist((page - 1) * 20);
+		}
+		//ip와 target이 전체가 선택될때 
+		//jul20_web/admin?ip=&target=
+		else if(request.getParameter("ip") == "" 
+				&& request.getParameter("target") == "") {
+			list = dao.loglist((page - 1) * 20);
+		//ip와 target이 null값이 아닐때 
+		}else if(request.getParameter("ip") != "" 
+				&& request.getParameter("target") != "") {
+			String ip = request.getParameter("ip");
+			String target = request.getParameter("target");
+			//둘 다 들어갔을시를 계산
+			list = dao.selectIpTarget(ip, target, (page - 1) * 10);
+			
+		//ip값만 null이 아닐때 
+		}else if(request.getParameter("ip") != ""
+				&& request.getParameter("target") == "") {
+			String ip = request.getParameter("ip");
+			list = dao.selectIP(ip, (page - 1) * 10);
+		//target값만 null이 아닐때 
+		}else if(request.getParameter("target") != ""
+				&& request.getParameter("ip") == "") {
+			String target = request.getParameter("target");
+			list = dao.selectTarget(target, (page - 1) * 10);
 		}
 		
+		//옵션에 붙을 ip목록
+		//ipList    SELECT DISTINCT log_ip FROM logview
+		ArrayList<String> ipList = dao.list("log_ip");
+		
+		//옵션에 붙을 target 목록
+		//targetList   SELECT DISTINCT log_target FROM logview
+		ArrayList<String> targetList = dao.list("log_target");
+		
+		RequestDispatcher rd = request.getRequestDispatcher("admin.jsp");
+		//가져갈 값은 여기
+		request.setAttribute("list", list); //로그리스트 목록
+		request.setAttribute("ipList", ipList); //ip목록
+		request.setAttribute("targetList", targetList); //target 목록
+		request.setAttribute("ip", request.getParameter("ip")); // ip 
+		request.setAttribute("target", request.getParameter("target")); //target
+		//System.out.println(list);
+		//System.out.println(targetList);
+		//2.totalCount
+		if(list != null && list.size() > 0) {
+			request.setAttribute(
+					"totalCount", list.get(0).get("totalcount"));
+		}
+		//3.page
+		request.setAttribute("page", page); //페이지 보내기
 		rd.forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		int page = 1;
+		if(request.getParameter("page") != null) {
+			page = Util.str2Int(request.getParameter("page"));
+		}
+		
+		String searchName = request.getParameter("searchname");
+		String search = request.getParameter("search");
+		//System.out.println(searchName); //search종류
+		//System.out.println(search); //설치입력값
+		//System.out.println(page);
+		
+		ArrayList<HashMap<String, Object>> list = 
+				dao.search(searchName, search, page);
+	
+		RequestDispatcher rd = request.getRequestDispatcher("admin.jsp");
+		request.setAttribute("list", list);
+
+		//totalCount
+		if(list != null && list.size() > 0) {
+			request.setAttribute(
+			"totalCount", list.get(0).get("totalcount"));
+		}
+		//System.out.println(list.get(0).get("totalcount"));
+		
+		
+		request.setAttribute("page", page);
+		//totalCount
+		//page도 보내야 합니다.
+		rd.forward(request, response);
 	}
 
 }
+

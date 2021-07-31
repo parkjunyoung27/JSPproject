@@ -36,7 +36,7 @@ public class GalleryDetail extends HttpServlet {
 		HashMap<String, Object> log = new HashMap<String, Object>();
 		log.put("ip", Util.getIP(request));
 		log.put("id", id);
-		log.put("target", "gallerydetail");
+		log.put("target", "galleryDetail");
 		log.put("etc", request.getHeader("User-Agent"));
 		LogDAO.insertLog(log);
 		

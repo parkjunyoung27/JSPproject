@@ -17,8 +17,8 @@
 	color: white;
 	line-height:50px;
 	overflow:hidden;
-	border-top-left-radius: 10px;
-	border-top-right-radius: 10px;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
 	font-weight: bold;
 }
 
@@ -68,99 +68,121 @@ tr:hover{
 	background-color: #D0E5E0;
 }
 
+#adminSearch {
+    text-align: center;
+    margin: 10px;
+}
+
+#searchform{
+	text-align:center;
+}
+
 </style>
 </head>
 <body>
-	<%@ include file="./navbar.jsp" %>
-	<div id="mainWrapper">
-		<%@ include file="./menu.jsp" %> <!-- 위에 menu.jsp파일이 추가된 것 **중요**-->
-		<div id = "board">
-			<div id="admin">
-				<div id="adminMenu">
-					<!-- 꾸며주세요 -->
-					&ensp; 회원관리  |  게시글 관리  |  로그관리
-				</div>
-				<div id="adminMain">
-					<h1>admin</h1>
-					<table>
-						<tr>
-							<th>번호</th>							
-							<th>
-								<select onchange="select()" id="ip"> <!-- select가 변경된다면 -->
-									<option value="">ip를 선택</option>
-									<c:forEach items="${ipList }" var="i">
-										<c:if test="${i eq ip }">
-										<!-- 서버가 보내준 ip와 값이 같다면 활성화 -->
-										<option value="${i }" selected="selected">${i }</option> 
-										<!-- value는 ip값, 자바스크립트 값 넘겨주는건  id를 줘야됨  -->
-										</c:if>
-										<c:if test="${i ne ip }">
-										<option value="${i }">${i }</option> 
-										<!-- value는 ip값, 자바스크립트 값 넘겨주는건  id를 줘야됨  -->
-										</c:if>
+<%@ include file="./navbar.jsp" %>
+<div id="mainWrapper">
+	<%@ include file="./menu.jsp" %> <!-- 위에 menu.jsp파일이 추가된 것 **중요**-->
+	<div id = "board">
+		<div id="admin">
+			<div id="adminMenu">
+				&ensp; 회원관리  |  게시글 관리  |  로그관리
+			</div>
+			
+			<div id="adminMain">
+				<h1>로그관리</h1>		
+				<c:choose>
+					<c:when test="${fn:length(list) > 0}">
+						<table>
+							<tr>
+								<th>번호</th>							
+								<th>
+								<select onchange="select()" id="ip">
+									<option value="" >ip 선택</option>
+								<c:forEach items="${ipList }" var="i">
+									<c:if test="${i eq ip }"> <!-- ip가 같으면 선택됨  -->
+										<option value="${i }" selected>${i }</option>
+									</c:if>
+									<c:if test="${i ne ip }">
+										<option value="${i }">${i }</option>
+									</c:if>
 									</c:forEach>
-								</select>	
-							</th>
+								</select>
+								</th>
 							<th>날짜</th>
-							<th>
+								<th>
 								<select onchange="select()" id="target">
-									<option disabled="diabled">target을 선택</option>
+									<option value="" >target 선택</option>
 									<c:forEach items="${targetList }" var="t">
-										 <c:if test="${target eq t }">
-										 	<option value="${t }" selected="selected">${t }</option>
-										 </c:if>
-										 <c:if test="${target ne t }">
-										 	<option value="${t }">${t }</option>
-										 </c:if>
+										<c:if test="${target eq t }">
+											<option value="${t }" selected>${t }</option>
+										</c:if>
+										<c:if test="${target ne t }">
+											<option value="${t }">${t }</option>
+										</c:if>
 									</c:forEach>
-								</select>	
-							</th>
-							<th>id</th>
-							<th>기타</th>
+								</select>
+								</th>
+								<th>id</th>
+								<th>기타</th>
+							</tr>
+						<c:forEach items="${list }" var="l">
+						<tr>						
+							<td>${l.log_no }</td>
+							<td>${l.log_ip }</td>
+							<td>${l.log_date }</td>
+							<td>${l.log_target }</td>
+							<td>${l.log_id }</td>
+							<td><c:out value="${fn:substring(l.log_etc, 0, 40) }"/> </td>
 						</tr>
-							<c:forEach items="${list }" var="list">
-						<tr>
-							<td>${list.log_no} </td>
-							<td>${list.log_ip} </td>
-							<td>${list.log_date }  </td>
-							<td>${list.log_target }  </td>
-							<td>${list.log_id }  </td>
-							<td>${list.log_etc }  </td> <!-- 출력조절해서 -->
-						</tr>
-							</c:forEach>
+						</c:forEach>
 					</table>
 				</div>	
+				&emsp;&emsp;전체 글 수 : ${totalCount } 개 / 현재 페이지 : ${page }
+				<form action="admin" method="post" id ="searchform">
+					<select name ="searchname">
+						<option value='' selected>전체</option>
+						<option value="ip">ip</option>
+						<option value="target" >target</option>
+						<option value="etc">etc</option>
+					</select>
+					<input type="text" id="search" name="search">
+					<button type="submit">검색</button>
+				</form>
 			</div>
+			
 			<div id="Paging">
 				<!-- 페이징 설정 /변수생성구문을 다 여기로 이동 -->
+		
 				<c:set var="pageName" value="admin" scope="request"/>
 				<c:set var="PAGENUMBER" value="20" scope="request"/> <!-- 한 쪽당 10개씩 나열  -->
+				<c:set var="LIMIT" value="10" scope="request"/>
 				<c:import url="paging.jsp"/>
-			</div>
+
+		</div>			
+			</c:when>
+			<c:otherwise>
+				<h2>출력할 데이터가 없습니다.</h2>
+			</c:otherwise>
+		</c:choose>			
+									
 		</div>
 	</div>
 	<%@ include file="./css/footer.jsp" %>
 
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
 <script type="text/javascript">
+
 function select(){
-	//alert("!");
 	//value값을 가져오고 싶다면 ?
+	//alert("!");
+	var ip = document.getElementById("ip").value;
 	var target = document.getElementById("target").value;
-	var ip = document.getElementById("ip").value;	
-	//alert(ip + "!");
-	location.href='admin?ip=' + ip + "&target=" + target; <!-- 동시에 2개다, 하나만 해도 나옴, 페이징 분여도 됨-->
-}
-
-function selectTarget(){
-	var target = document.getElementById("target").value;
-	//location.href='admin?target=' + target + '&page=' + ${page};
-	location.href='admin?target=' + target;
-}
-
+	//값 오는 것이 확인된다면 서블릿을 보내서 해당 ip것만 받도록 합니다.
+	//location.href='admin?ip=' + ip + '&page=' + ${page };
+	location.href='admin?ip='+ip+'&target='+ target + '&page=' + 1;
+	}
 </script>
+
 
 
 </body>

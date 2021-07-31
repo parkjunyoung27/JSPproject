@@ -25,17 +25,6 @@ public class Index extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//paging
-		int page = 1; // 기본값
-		if(request.getParameter("page") != null) {
-			page = Util.str2Int2(request.getParameter("page"));
-		}
-		
-		System.out.println("page : " + request.getParameter("page"));
-		
-		//DB호출 -> DAO -> DTO(대신 MAP으로 바꿔서)
-		//			ArrayList<BoardDTO> -> 카페24는 이 형태로 만들어야됨 
-		//			ArrayLIst<HashMap<String, Object>>   -> si업체에서 주로 활용		
 		HttpSession session = request.getSession();
 		String id = "";
 		if(session.getAttribute("id")!=null) {
@@ -48,6 +37,18 @@ public class Index extends HttpServlet {
 		log.put("target", "index");
 		log.put("etc", request.getHeader("User-Agent"));
 		LogDAO.insertLog(log);
+
+		//paging
+		int page = 1; // 기본값
+		if(request.getParameter("page") != null) {
+			page = Util.str2Int2(request.getParameter("page"));
+		}
+		
+		System.out.println("page : " + request.getParameter("page"));
+		
+		//DB호출 -> DAO -> DTO(대신 MAP으로 바꿔서)
+		//			ArrayList<BoardDTO> -> 카페24는 이 형태로 만들어야됨 
+		//			ArrayLIst<HashMap<String, Object>>   -> si업체에서 주로 활용		
 		
 		//RD에 붙이기 
 		RequestDispatcher rd = request.getRequestDispatcher("./index.jsp"); // index.jsp가 열리면서 해당 내용이 뜸 

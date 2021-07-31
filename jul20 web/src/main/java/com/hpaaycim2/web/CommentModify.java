@@ -31,7 +31,7 @@ public class CommentModify extends HttpServlet {
 
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
 		//한글처리
 		request.setCharacterEncoding("UTF-8");
 		

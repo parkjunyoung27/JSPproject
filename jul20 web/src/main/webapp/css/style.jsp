@@ -32,8 +32,8 @@ overflow: auto;
 	min-height: 600px;
 	margin-top:30px;
 	margin-right: 10px;
-	border: 2px white solid;
-	background-color: #B8D7FF;
+	border: 3px black solid;
+	background-color: white;
 	border-radius: 10px;
 	margin-bottom: 30px;
 }
@@ -147,6 +147,7 @@ li{
 	float: left;
 	font-size: 10pt;
 	border-bottom: 1px solid silver;
+	background: white;
 }
 
 #ulTable > li > ul > li:first-child{ /* 첫번째 칸 */
@@ -218,28 +219,31 @@ li{
 	width:100%;
 	text-align: center;
 	line-height: 80px;
-	border: 1px white solid;
+	border-bottom: 3px black solid;
 	font-size: 130%;
 	font-weight: bold;
 }
 
 
 #dmember{
-	margin-left: 20px;
+	margin-left: 0px;
 	width: 50%;
 	float:left;
 	height: 50px;
-	text-align: left;
+	text-align: center;
 	line-height: 50px;	
+	border-bottom: 3px black solid;
+	border-right: 3px black solid;
 }
 
 #ddate{
 	margin: 0;
-	width: 45%;
+	width: 447px;
 	float:left;
 	height: 50px;
 	line-height: 50px;
-	text-align: right;
+	text-align: center;
+	border-bottom: 3px solid black;
 }
 
 #dcontent{
@@ -247,7 +251,7 @@ li{
 	width: 880px;
 	padding: 10px;
 	min-height: 200px;	
-	border: 1px white solid;	
+	border-bottom: 3px black solid;
 }
 
 #dcontent img {

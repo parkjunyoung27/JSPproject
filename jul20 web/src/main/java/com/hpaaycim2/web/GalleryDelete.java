@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.hpaaycim2.dao.GalleryDAO;
+import com.hpaaycim2.dao.LogDAO;
 import com.hpaaycim2.util.FileThing;
 import com.hpaaycim2.util.Util;
 
@@ -27,6 +28,18 @@ public class GalleryDelete extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
+		String id = "";
+		if(session.getAttribute("id")!=null) {
+			id = (String)session.getAttribute("id");
+		}
+		//log남기기
+		HashMap<String, Object> log = new HashMap<String, Object>();
+		log.put("ip", Util.getIP(request));
+		log.put("id", id);
+		log.put("target", "galleryDelete");
+		log.put("etc", request.getHeader("User-Agent"));
+		LogDAO.insertLog(log);
+		
 		//gno들어오는지, 세션있는지
 		if(request.getParameter("gno") != null
 				&& Util.str2Int2(request.getParameter("gno")) != 0 
