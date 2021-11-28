@@ -1,7 +1,7 @@
 # JSPproject
 JSP를 이용해서 게시판사이트를 만들었습니다.
 
-# Skill
+# Skills
 
 1. 언어 - java, HTML5, CSS, javascript, jquery, ajax   
 2. 툴 - 이클립스, dbeaver 
